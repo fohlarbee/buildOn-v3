@@ -258,28 +258,45 @@ function TitleOverlay({
         transformOrigin: "top left",
       }}
     >
-      <h1
+      <div
         style={{
-          margin: 0,
-          fontFamily: "var(--font-roboto-slab)",
-          fontWeight: 700,
-          fontSize: LAYOUT.title.fontSize,
-          lineHeight: 1,
-          letterSpacing: LAYOUT.title.letterSpacing,
-          whiteSpace: "nowrap",
-          // Figma gradient fill with COLOR_DODGE blend: near-white → white 2%
-          background:
-            "linear-gradient(172deg, #F5F5F5 0%, rgba(255,255,255,0.02) 100%)",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          color: "transparent",
-          mixBlendMode: "color-dodge",
-          filter: "drop-shadow(0 2px 20px rgba(255,255,255,0.1))",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 18,
+          background: "rgba(255, 255, 255, 0.06)",
+          backdropFilter: "blur(14px) saturate(140%)",
+          WebkitBackdropFilter: "blur(14px) saturate(140%)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          boxShadow: "0 18px 40px -22px rgba(0, 0, 0, 0.45)",
+          padding: "10px 24px",
         }}
       >
-        {TEXT.title}
-      </h1>
+        <h1
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-roboto-slab)",
+            fontWeight: 700,
+            fontSize: LAYOUT.title.fontSize,
+            lineHeight: 1,
+            letterSpacing: LAYOUT.title.letterSpacing,
+            whiteSpace: "nowrap",
+            // Figma gradient fill with COLOR_DODGE blend: near-white → white 2%
+            background:
+              "linear-gradient(172deg, #F5F5F5 0%, rgba(255,255,255,0.02) 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            color: "transparent",
+            mixBlendMode: "color-dodge",
+            filter: "drop-shadow(0 2px 20px rgba(255,255,255,0.1))",
+          }}
+        >
+          {TEXT.title}
+        </h1>
+      </div>
     </motion.div>
   );
 }
