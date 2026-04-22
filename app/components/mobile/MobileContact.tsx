@@ -17,10 +17,27 @@ export function MobileContact() {
   const [isSent, setIsSent] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [helpMaxHeight, setHelpMaxHeight] = useState(480);
   const viewport = { once: true, amount: 0.2 };
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const updateHelpMaxHeight = () => {
+      const vvHeight = window.visualViewport?.height ?? window.innerHeight;
+      // Keep the panel above the FAB and keyboard while leaving breathing room.
+      setHelpMaxHeight(Math.max(260, Math.floor(vvHeight - 120)));
+    };
+
+    updateHelpMaxHeight();
+    window.addEventListener("resize", updateHelpMaxHeight);
+    window.visualViewport?.addEventListener("resize", updateHelpMaxHeight);
+    return () => {
+      window.removeEventListener("resize", updateHelpMaxHeight);
+      window.visualViewport?.removeEventListener("resize", updateHelpMaxHeight);
+    };
   }, []);
 
   const fade = (delay: number) => ({
@@ -246,6 +263,17 @@ export function MobileContact() {
                   <motion.form
                     key="mobile-help-center-popover"
                     onSubmit={sendEmail}
+                    onFocusCapture={(e) => {
+                      const target = e.target;
+                      if (!(target instanceof HTMLElement)) return;
+                      window.requestAnimationFrame(() => {
+                        target.scrollIntoView({
+                          block: "nearest",
+                          inline: "nearest",
+                          behavior: "smooth",
+                        });
+                      });
+                    }}
                     initial={
                       reduce ? undefined : { opacity: 0, y: 16, scale: 0.96 }
                     }
@@ -278,6 +306,10 @@ export function MobileContact() {
                       color: "#FFFFFF",
                       boxShadow: "0 20px 45px rgba(0,0,0,0.45)",
                       transformOrigin: "bottom right",
+                      maxHeight: helpMaxHeight,
+                      overflowY: "auto",
+                      overscrollBehavior: "contain",
+                      WebkitOverflowScrolling: "touch",
                     }}
                   >
                     <div

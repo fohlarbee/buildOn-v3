@@ -372,29 +372,24 @@ function RightCard() {
 
 /**
  * Glassmorphic card matching mobile: colored top rail, frosted fill, white
- * border, soft shadow. DesktopCanvas applies `transform: scale(...)` to an
- * ancestor, which in Chrome/Safari neutralizes real `backdrop-filter`
- * sampling of elements outside the transformed subtree. To get a reliable
- * "you can see the astronaut through the glass" effect, we render a
- * blurred clone of the hero image inside the card, aligned to the card's
- * position so it matches the image visible behind it pixel-for-pixel.
+ * border, soft shadow. DesktopCanvas wraps everything in `transform:
+ * scale(...)`, which in Chrome/Safari prevents real `backdrop-filter` from
+ * sampling the hero image outside the transformed subtree. To still get a
+ * "see the astronaut through the glass" look, we render a blurred clone of
+ * the hero image inside each card, scaled to fill so the frosted panel
+ * reads as glass on any card position.
  */
 function CardShell({
   accent,
-  cardX,
-  cardY,
   children,
 }: {
   accent: "blue" | "yellow";
-  cardX: number;
-  cardY: number;
+  cardX?: number;
+  cardY?: number;
   children: React.ReactNode;
 }) {
   const isYellow = accent === "yellow";
   const accentColor = isYellow ? "#FFC116" : "#B0C3FB";
-
-  const heroOffsetX = LAYOUT.heroImage.to.x - cardX;
-  const heroOffsetY = LAYOUT.heroImage.to.y - cardY;
 
   return (
     <div className="relative h-full w-full">
@@ -412,14 +407,19 @@ function CardShell({
         className="relative h-full overflow-hidden"
         style={{
           borderRadius: 16,
-          border: "1px solid rgba(255, 255, 255, 0.2)",
+          border: "1px solid rgba(255, 255, 255, 0.22)",
           boxShadow:
             "0 18px 40px -22px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.15)",
           padding: "22px 24px",
+          background: "rgba(255, 255, 255, 0.04)",
+          backdropFilter: "blur(18px) saturate(140%)",
+          WebkitBackdropFilter: "blur(18px) saturate(140%)",
         }}
       >
-        {/* Blurred hero-image layer — produces the glass look even when an
-            ancestor transform disables real backdrop-filter. */}
+        {/* Frosted hero-image backdrop so the card reads as glass even when
+            an ancestor transform disables real backdrop-filter. The image
+            fills the card so a recognizable portion of the astronaut shows
+            through the frost. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
@@ -431,30 +431,27 @@ function CardShell({
             aria-hidden
             style={{
               position: "absolute",
-              left: heroOffsetX,
-              top: heroOffsetY,
-              width: LAYOUT.heroImage.w,
-              height: LAYOUT.heroImage.h,
-              maxWidth: "none",
+              inset: 0,
+              width: "100%",
+              height: "100%",
               objectFit: "cover",
-              filter: "blur(28px) saturate(150%)",
-              opacity: 0.95,
-              transform: "scale(1.12)",
-              transformOrigin: "center",
+              objectPosition: "50% 25%",
+              filter: "blur(18px) saturate(150%) brightness(1.05)",
+              opacity: 0.85,
+              transform: "scale(1.18)",
             }}
           />
           {/* Frost tint — soft white wash so the card reads as glass, not photo */}
           <div
             className="absolute inset-0"
             style={{
-              background: "rgba(255, 255, 255, 0.06)",
-              backdropFilter: "blur(6px) saturate(130%)",
-              WebkitBackdropFilter: "blur(6px) saturate(130%)",
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%)",
             }}
           />
         </div>
 
-        <div className="relative z-[1] h-full">{children}</div>
+        <div className="relative z-1 h-full">{children}</div>
       </div>
     </div>
   );

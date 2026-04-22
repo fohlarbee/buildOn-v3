@@ -20,12 +20,9 @@ import { MobileLayout } from "@/app/components/mobile/MobileLayout";
  * showing the wrong layout first (desktop users seeing mobile flash).
  */
 function useViewportMode(): "mobile" | "desktop" | null {
-  const [mode, setMode] = useState<"mobile" | "desktop" | null>(() => {
-    if (typeof window === "undefined") return null;
-    return window.matchMedia("(min-width: 1024px)").matches
-      ? "desktop"
-      : "mobile";
-  });
+  // Keep server HTML and first client render identical to avoid hydration
+  // mismatch, then resolve actual viewport mode after mount.
+  const [mode, setMode] = useState<"mobile" | "desktop" | null>(null);
 
   useLayoutEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
