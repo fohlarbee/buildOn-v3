@@ -42,5 +42,3 @@ next-env.d.ts
 
 # Figma design cache (screenshots + JSON)
 .figma-cache/
-public/figma/
-publi/figma/
