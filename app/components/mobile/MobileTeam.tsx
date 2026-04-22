@@ -92,7 +92,11 @@ export function MobileTeam() {
             <motion.div
               key={`${m.name}-${i}`}
               {...fade(0.24 + i * 0.06)}
-              className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm sm:p-5"
+              className={`flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm sm:p-5 ${
+                i === MEMBERS.length - 1 && MEMBERS.length % 2 !== 0
+                  ? "col-span-2 mx-auto w-full max-w-[220px] sm:col-span-1 sm:mx-0 sm:max-w-none"
+                  : ""
+              }`}
             >
               <Avatar name={m.name} accent={m.accent} />
               <div className="text-center">

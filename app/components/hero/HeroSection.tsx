@@ -412,12 +412,10 @@ function CardShell({
         className="relative h-full overflow-hidden"
         style={{
           borderRadius: 16,
-          border: "1px solid rgba(255, 255, 255, 0.22)",
-          background: "rgba(255, 255, 255, 0.06)",
-          backdropFilter: "blur(18px) saturate(140%)",
-          WebkitBackdropFilter: "blur(18px) saturate(140%)",
-          boxShadow: "0 18px 40px -22px rgba(0, 0, 0, 0.45)",
-          padding: "28px 51px 21px 25px",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          boxShadow:
+            "0 18px 40px -22px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.15)",
+          padding: "22px 24px",
         }}
       >
         {/* Blurred hero-image layer — produces the glass look even when an
@@ -427,33 +425,36 @@ function CardShell({
           className="pointer-events-none absolute inset-0"
           style={{ borderRadius: "inherit", overflow: "hidden" }}
         >
-          <div
+          <img
+            src="/figma/hero-image.png"
+            alt=""
+            aria-hidden
             style={{
               position: "absolute",
               left: heroOffsetX,
               top: heroOffsetY,
               width: LAYOUT.heroImage.w,
               height: LAYOUT.heroImage.h,
-              backgroundImage: "url(/figma/hero-image.png)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(22px) saturate(135%)",
-              opacity: 0.55,
-              transform: "scale(1.08)",
+              maxWidth: "none",
+              objectFit: "cover",
+              filter: "blur(28px) saturate(150%)",
+              opacity: 0.95,
+              transform: "scale(1.12)",
               transformOrigin: "center",
             }}
           />
-          {/* Frost tint + subtle top-down highlight */}
+          {/* Frost tint — soft white wash so the card reads as glass, not photo */}
           <div
             className="absolute inset-0"
             style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.02) 100%)",
+              background: "rgba(255, 255, 255, 0.06)",
+              backdropFilter: "blur(6px) saturate(130%)",
+              WebkitBackdropFilter: "blur(6px) saturate(130%)",
             }}
           />
         </div>
 
-        <div className="relative z-1 h-full">{children}</div>
+        <div className="relative z-[1] h-full">{children}</div>
       </div>
     </div>
   );

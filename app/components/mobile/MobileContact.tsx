@@ -204,7 +204,7 @@ export function MobileContact() {
               style={{
                 position: "fixed",
                 right: 14,
-                bottom: 28,
+                bottom: 42,
                 zIndex: 9999,
                 flexDirection: "column",
                 alignItems: "flex-end",
