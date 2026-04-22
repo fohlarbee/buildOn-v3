@@ -357,7 +357,7 @@ export function ContactSection() {
               style={{
                 position: "fixed",
                 right: 20,
-                bottom: 20,
+                bottom: 32,
                 zIndex: 9999,
                 flexDirection: "column",
                 alignItems: "flex-end",

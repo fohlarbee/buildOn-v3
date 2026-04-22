@@ -258,45 +258,28 @@ function TitleOverlay({
         transformOrigin: "top left",
       }}
     >
-      <div
+      <h1
         style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 18,
-          background: "rgba(255, 255, 255, 0.06)",
-          backdropFilter: "blur(14px) saturate(140%)",
-          WebkitBackdropFilter: "blur(14px) saturate(140%)",
-          border: "1px solid rgba(255, 255, 255, 0.2)",
-          boxShadow: "0 18px 40px -22px rgba(0, 0, 0, 0.45)",
-          padding: "10px 24px",
+          margin: 0,
+          fontFamily: "var(--font-roboto-slab)",
+          fontWeight: 700,
+          fontSize: LAYOUT.title.fontSize,
+          lineHeight: 1,
+          letterSpacing: LAYOUT.title.letterSpacing,
+          whiteSpace: "nowrap",
+          // Figma gradient fill with COLOR_DODGE blend: near-white → white 2%
+          background:
+            "linear-gradient(172deg, #F5F5F5 0%, rgba(255,255,255,0.02) 100%)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          color: "transparent",
+          mixBlendMode: "color-dodge",
+          filter: "drop-shadow(0 2px 20px rgba(255,255,255,0.1))",
         }}
       >
-        <h1
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-roboto-slab)",
-            fontWeight: 700,
-            fontSize: LAYOUT.title.fontSize,
-            lineHeight: 1,
-            letterSpacing: LAYOUT.title.letterSpacing,
-            whiteSpace: "nowrap",
-            // Figma gradient fill with COLOR_DODGE blend: near-white → white 2%
-            background:
-              "linear-gradient(172deg, #F5F5F5 0%, rgba(255,255,255,0.02) 100%)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            color: "transparent",
-            mixBlendMode: "color-dodge",
-            filter: "drop-shadow(0 2px 20px rgba(255,255,255,0.1))",
-          }}
-        >
-          {TEXT.title}
-        </h1>
-      </div>
+        {TEXT.title}
+      </h1>
     </motion.div>
   );
 }
@@ -336,7 +319,11 @@ function Ellipse({
 
 function LeftCard() {
   return (
-    <CardShell tone="solid">
+    <CardShell
+      accent="blue"
+      cardX={LAYOUT.leftCard.to.x}
+      cardY={LAYOUT.leftCard.to.y}
+    >
       <p
         style={{
           margin: 0,
@@ -362,7 +349,11 @@ function LeftCard() {
 
 function RightCard() {
   return (
-    <CardShell tone="glass">
+    <CardShell
+      accent="yellow"
+      cardX={LAYOUT.rightCard.to.x}
+      cardY={LAYOUT.rightCard.to.y}
+    >
       <p
         style={{
           margin: 0,
@@ -379,52 +370,91 @@ function RightCard() {
   );
 }
 
+/**
+ * Glassmorphic card matching mobile: colored top rail, frosted fill, white
+ * border, soft shadow. DesktopCanvas applies `transform: scale(...)` to an
+ * ancestor, which in Chrome/Safari neutralizes real `backdrop-filter`
+ * sampling of elements outside the transformed subtree. To get a reliable
+ * "you can see the astronaut through the glass" effect, we render a
+ * blurred clone of the hero image inside the card, aligned to the card's
+ * position so it matches the image visible behind it pixel-for-pixel.
+ */
 function CardShell({
-  tone,
+  accent,
+  cardX,
+  cardY,
   children,
 }: {
-  tone: "solid" | "glass";
+  accent: "blue" | "yellow";
+  cardX: number;
+  cardY: number;
   children: React.ReactNode;
 }) {
-  // Both desktop cards now use a transparent glassmorphic fill so the hero
-  // image reads through. The "solid" variant keeps the blue top rail; the
-  // "glass" variant keeps the yellow top rail (matches Figma accents).
-  const isYellow = tone === "glass";
-  const accentColor = isYellow
-    ? "rgba(255, 193, 22, 1)"
-    : "rgba(176, 195, 251, 1)";
+  const isYellow = accent === "yellow";
+  const accentColor = isYellow ? "#FFC116" : "#B0C3FB";
+
+  const heroOffsetX = LAYOUT.heroImage.to.x - cardX;
+  const heroOffsetY = LAYOUT.heroImage.to.y - cardY;
 
   return (
-    <div
-      className="relative h-full w-full"
-      style={{
-        borderRadius: 16,
-        background: "rgba(255, 255, 255, 0.06)",
-        backdropFilter: "blur(18px) saturate(140%)",
-        WebkitBackdropFilter: "blur(18px) saturate(140%)",
-        padding: "28px 51px 21px 25px",
-        boxShadow: [
-          `3px -12px 0 ${isYellow ? "0.9px" : "0"} ${accentColor}`,
-          "0 10px 30px -12px rgba(0, 0, 0, 0.45)",
-        ].join(", "),
-      }}
-    >
-      {/* 1px gradient border */}
-      <span
+    <div className="relative h-full w-full">
+      {/* Colored top accent rail (matches mobile GlassCard) */}
+      <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute top-[-5px] left-3 right-3 h-[6px] rounded-t-xl"
         style={{
-          borderRadius: 16,
-          padding: 1,
-          background:
-            "linear-gradient(140deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0.08) 100%)",
-          WebkitMask:
-            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-          WebkitMaskComposite: "xor",
-          maskComposite: "exclude",
+          background: accentColor,
+          boxShadow: `0 0 14px ${accentColor}55`,
         }}
       />
-      <div className="relative z-1 h-full">{children}</div>
+
+      <div
+        className="relative h-full overflow-hidden"
+        style={{
+          borderRadius: 16,
+          border: "1px solid rgba(255, 255, 255, 0.22)",
+          background: "rgba(255, 255, 255, 0.06)",
+          backdropFilter: "blur(18px) saturate(140%)",
+          WebkitBackdropFilter: "blur(18px) saturate(140%)",
+          boxShadow: "0 18px 40px -22px rgba(0, 0, 0, 0.45)",
+          padding: "28px 51px 21px 25px",
+        }}
+      >
+        {/* Blurred hero-image layer — produces the glass look even when an
+            ancestor transform disables real backdrop-filter. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ borderRadius: "inherit", overflow: "hidden" }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: heroOffsetX,
+              top: heroOffsetY,
+              width: LAYOUT.heroImage.w,
+              height: LAYOUT.heroImage.h,
+              backgroundImage: "url(/figma/hero-image.png)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "blur(22px) saturate(135%)",
+              opacity: 0.55,
+              transform: "scale(1.08)",
+              transformOrigin: "center",
+            }}
+          />
+          {/* Frost tint + subtle top-down highlight */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.02) 100%)",
+            }}
+          />
+        </div>
+
+        <div className="relative z-1 h-full">{children}</div>
+      </div>
     </div>
   );
 }
