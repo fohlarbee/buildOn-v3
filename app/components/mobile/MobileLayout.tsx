@@ -1,7 +1,7 @@
 import { MobileNavBar } from "./MobileNavBar";
 import { MobileHero } from "./MobileHero";
 import { MobileCoreValues } from "./MobileCoreValues";
-import { MobileTeam } from "./MobileTeam";
+// import { MobileTeam } from "./MobileTeam";
 import { MobileServices } from "./MobileServices";
 import { MobileProjects } from "./MobileProjects";
 import { MobileProcess } from "./MobileProcess";
@@ -20,11 +20,11 @@ import { MobileFooter } from "./MobileFooter";
  */
 export function MobileLayout() {
   return (
-    <div className="w-full overflow-x-hidden bg-[#E6ECFE] text-zinc-900">
+    <div className="w-full overflow-hidden bg-transparent text-zinc-900">
       <MobileNavBar />
       <MobileHero />
       <MobileCoreValues />
-      <MobileTeam />
+      {/* <MobileTeam /> */}
       <MobileServices />
       <MobileProjects />
       <MobileProcess />

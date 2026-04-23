@@ -207,7 +207,7 @@ function HeroCanvas() {
         className="pointer-events-none absolute inset-0"
         animate={{ opacity: hovered ? 1 : 0.6 }}
         transition={{
-          duration: MOTION.hoverSpringDurationS / 3,
+          duration: MOTION.heroHoverGlowDurationS,
           ease: "easeOut",
         }}
         style={{
@@ -245,10 +245,21 @@ function TitleOverlay({
           ? { x: LAYOUT.title.to.x, y: LAYOUT.title.to.y, scale: 1, opacity: 1 }
           : { x: LAYOUT.title.to.x, y: LAYOUT.title.to.y, scale: 1, opacity: 1 }
       }
-      transition={{
-        ...spring,
-        delay: reduce ? 0 : MOTION.titleDelayMs / 1000,
-      }}
+      transition={
+        reduce
+          ? { duration: 0 }
+          : {
+              delay: MOTION.titleDelayMs / 1000,
+              x: spring,
+              y: spring,
+              scale: spring,
+              opacity: {
+                type: "tween" as const,
+                duration: MOTION.titleOpacityDurationS,
+                ease: [0.16, 1, 0.3, 1] as const,
+              },
+            }
+      }
       style={{
         position: "absolute",
         left: 0,
@@ -335,7 +346,7 @@ function LeftCard() {
         }}
       >
         {
-          "Based in Delaware, United States, buildON Inc. is a forward-thinking technology startup focused on turning bold ideas into impactful digital solutions. We partner with businesses at every stage "
+          "Based in Delaware, United States, BuildOn, Inc. is a forward-thinking technology startup focused on turning bold ideas into impactful digital solutions. We partner with businesses at every stage "
         }
         <span style={{ color: COLORS.cardHighlightYellow }}>
           {"from early concept"}

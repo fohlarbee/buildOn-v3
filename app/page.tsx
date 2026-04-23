@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from "react";
 import { DesktopCanvas } from "@/app/components/DesktopCanvas";
 import { HeroSection } from "@/app/components/hero/HeroSection";
 import { CoreValues } from "@/app/components/sections/CoreValues";
-import { TeamSection } from "@/app/components/sections/TeamSection";
+// import { TeamSection } from "@/app/components/sections/TeamSection";
 import { ServicesSection } from "@/app/components/sections/ServicesSection";
 import { ProjectsSection } from "@/app/components/sections/ProjectsSection";
 import { ProcessSection } from "@/app/components/sections/ProcessSection";
@@ -39,22 +39,24 @@ export default function Home() {
   const mode = useViewportMode();
 
   if (mode === null) {
-    return <main className="min-h-svh bg-[#E6ECFE]" />;
+    return <main className="min-h-svh bg-transparent" />;
   }
 
   return (
-    <main className="min-h-svh bg-white text-zinc-900">
+    <main className="min-w-0 bg-transparent text-zinc-900">
       {mode === "desktop" ? (
-        <DesktopCanvas>
-          <HeroSection />
-          <CoreValues />
-          <TeamSection />
-          <ServicesSection />
-          <ProjectsSection />
-          <ProcessSection />
+        <>
+          <DesktopCanvas>
+            <HeroSection />
+            <CoreValues />
+            {/* <TeamSection /> */}
+            <ServicesSection />
+            <ProjectsSection />
+            <ProcessSection />
+          </DesktopCanvas>
           <ContactSection />
           <FooterSection />
-        </DesktopCanvas>
+        </>
       ) : (
         <MobileLayout />
       )}

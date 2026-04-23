@@ -64,16 +64,39 @@ export function MobileProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full text-white sm:mb-8 sm:h-24 sm:w-24"
+          className="mx-auto mb-5 w-full max-w-[340px] rounded-[22px] border border-white/15 px-3 py-3 text-white sm:mb-7 sm:max-w-[380px]"
           style={{
-            background: NAVY_CARD,
+            background:
+              "linear-gradient(145deg, rgba(21,28,102,0.92), rgba(12,18,82,0.92))",
             boxShadow:
-              "0 20px 40px -18px rgba(23, 25, 105, 0.55), inset 0 1px 0 rgba(255,255,255,0.12)",
+              "0 24px 44px -22px rgba(23, 25, 105, 0.62), inset 0 1px 0 rgba(255,255,255,0.16)",
           }}
         >
-          <span className="font-[var(--font-red-hat)] text-lg font-bold sm:text-xl">
-            Projects
-          </span>
+          <div className="flex items-center gap-3">
+            <div
+              className="relative flex h-12 w-12 items-center justify-center rounded-full sm:h-14 sm:w-14"
+              style={{
+                background:
+                  "radial-gradient(circle at 30% 30%, #7A95FF 0%, #4E4BD5 65%, #36309E 100%)",
+                boxShadow:
+                  "0 14px 30px -14px rgba(85,126,246,0.8), inset 0 1px 0 rgba(255,255,255,0.26)",
+              }}
+              aria-hidden
+            >
+              <div
+                className="h-3 w-3 rounded-full bg-white/90"
+                style={{ boxShadow: "0 0 0 4px rgba(255,255,255,0.16)" }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-[var(--font-red-hat)] text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/65">
+                Featured work
+              </span>
+              <span className="font-[var(--font-red-hat)] text-xl font-bold leading-tight text-white sm:text-2xl">
+                Projects
+              </span>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div

@@ -80,17 +80,21 @@ export const LAYOUT = {
 } as const;
 
 /**
- * Figma prototype interactions:
- *   1. Title: AFTER_TIMEOUT 0.8s → SMART_ANIMATE with CUSTOM_SPRING
- *      (mass: 1, stiffness: 15.2, damping: 7.79), duration ≈ 2.588s
- *   2. Container MOUSE_ENTER → SMART_ANIMATE to Variant 2 (same spring)
- *   3. Mail icon ON_HOVER → SMART_ANIMATE EASE_IN 300ms
- *   4. CTA MOUSE_ENTER → DISSOLVE EASE_IN_AND_OUT 500ms
+ * Motion tuned from Figma specs toward a swifter, smoother feel (snappier spring,
+ * shorter lead-in). Figma reference was ~0.8s delay + very soft spring (~2.6s).
  */
 export const MOTION = {
-  titleDelayMs: 800,
-  heroSpring: { mass: 1, stiffness: 15.2, damping: 7.79 },
-  hoverSpringDurationS: 2.588,
+  /** Wait after mount before hero “settle” spring (image, cards, title start). */
+  titleDelayMs: 380,
+  /**
+   * Shared spring for hero image + cards (and title x/y/scale).
+   * Higher stiffness + balanced damping = faster settle, minimal overshoot.
+   */
+  heroSpring: { mass: 0.88, stiffness: 168, damping: 26 },
+  /** Title opacity uses a short ease instead of spring to avoid floaty fade. */
+  titleOpacityDurationS: 0.48,
+  /** Hover radial glow opacity tween (section mouse move). */
+  heroHoverGlowDurationS: 0.32,
   mailEaseInMs: 300,
   ctaDissolveMs: 500,
 } as const;
@@ -98,8 +102,8 @@ export const MOTION = {
 export const TEXT = {
   title: "BuildOn Inc.",
   leftCard:
-    "Based in Delaware, United States, buildON Inc. is a forward-thinking technology startup focused on turning bold ideas into impactful digital solutions. We partner with businesses at every stage  from early concept to fully deployed platforms .",
-  // Character ranges with yellow highlight (index 118..134, "buildON Inc. is a"-ish) and blue last char
+    "Based in Delaware, United States, BuildOn, Inc. is a forward-thinking technology startup focused on turning bold ideas into impactful digital solutions. We partner with businesses at every stage  from early concept to fully deployed platforms .",
+  // Character ranges with yellow highlight (index 118..134, "BuildOn, Inc. is a"-ish) and blue last char
   leftCardRanges: {
     yellowFrom: 119,
     yellowTo: 136,

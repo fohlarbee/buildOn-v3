@@ -1,8 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* Figma “paper” mid-stop; semantic default for utilities (e.g. bg-background) */
+  --background: #e6ecfe;
   --foreground: #171717;
+  /*
+   * Soft angled linear gradient: same hue family as hero navy (#000558) and
+   * accents (#8AA7F9, #557EF6), lifted to ~92–97% lightness so the shell feels
+   * continuous with the hero’s blue without competing with the dark U-shape.
+   * Stretched to full document height on body (background-size: 100% 100%).
+   */
+  --buildon-page-gradient: linear-gradient(
+    168deg,
+    #dee7fb 0%,
+    #e3eaf8 14%,
+    #e6ecfe 38%,
+    #eef1fa 72%,
+    #e2e9f7 100%
+  );
 }
 
 @theme inline {
@@ -14,13 +29,40 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    /* Landing art is light-first; keep page shell gradient unchanged. */
     --foreground: #ededed;
+    --background: #e6ecfe;
   }
 }
 
+/* Do not set overflow-x on html/body: overflow-x: clip|hidden with the default
+   overflow-y: visible is resolved as overflow-y: auto (CSS overflow pairing),
+   which can make the root a brittle scrollport and show a transient/odd scrollbar
+   until layout stabilizes. Clip horizontal bleed on page wrappers (e.g. main)
+   or fix sources (e.g. desktop canvas scale) instead. */
+
+/* Same scrollbar hiding as `app/layout.tsx` (inline + <head> style for first
+   paint). Redundant here so all routes and late-loaded CSS still match. */
+html {
+  min-height: 100%;
+  background: var(--buildon-page-gradient);
+}
+
+html,
 body {
-  background: var(--background);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge / IE */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chromium, Safari, Opera, Edge (Chromium) */
+}
+
+body {
+  min-height: 100%;
+  background: var(--buildon-page-gradient);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }

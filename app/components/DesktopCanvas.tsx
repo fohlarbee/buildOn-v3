@@ -11,17 +11,26 @@ import {
   type ReactNode,
 } from "react";
 
+type CanvasRootStyle = CSSProperties & { zoom?: number };
+
 /**
- * The BuildOn Figma file is a single Desktop - 2 frame, 1440 × 5844 design px,
- * with sections at absolute coordinates. DesktopCanvas scales the entire
- * design frame uniformly to the viewport width, so every section inside can
- * render at its exact Figma position (x, y, w, h) and preserve all pixel
- * relationships across the whole page.
+ * The BuildOn Figma file is a single 1440×H design-px frame with sections
+ * absolutely positioned. The frame is placed in a **centered, max-w-[1440px]**
+ * column (with page padding). We use CSS `zoom` (not `transform: scale`) so
+ * the scaled design’s **layout** size matches the painted size — otherwise
+ * overflow would clip the right side of the 1440 canvas when the column is
+ * narrower than 1440px, breaking the hero and following sections.
+ *
+ * Use `overflow-hidden` (both axes), not `overflow-x-hidden`: with only x set,
+ * CSS pairs `overflow-y: visible` to `auto`, creating an inner scrollport and
+ * a bogus vertical scrollbar on this column until the user scrolls the page.
  */
 
 export const DESIGN_WIDTH = 1440;
-export const DESIGN_HEIGHT = 5831;
-export const DESIGN_BG = "#E6ECFE"; // page background from Figma (Desktop - 2)
+/** Canvas ends after the process section; contact + footer are full-bleed below. */
+export const DESIGN_HEIGHT = 3817;
+/** Figma flat “paper” mid-stop; shell uses `var(--buildon-page-gradient)` in CSS. */
+export const DESIGN_BG = "#E6ECFE";
 
 const ScaleContext = createContext(1);
 export function useDesignScale() {
@@ -33,6 +42,7 @@ const useIsoLayoutEffect =
 
 export function DesktopCanvas({ children }: { children: ReactNode }) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  // Initial 1 matches SSR; useLayoutEffect sets the real value before first paint.
   const [scale, setScale] = useState(1);
 
   useIsoLayoutEffect(() => {
@@ -41,6 +51,15 @@ export function DesktopCanvas({ children }: { children: ReactNode }) {
 
     const update = () => {
       const w = el.clientWidth;
+      if (w === 0) {
+        // Rare: layout not ready; retry next frame so we never stay at scale 1
+        // on a narrow column (avoids 1440px layout width and root overflow).
+        requestAnimationFrame(() => {
+          const w2 = el.clientWidth;
+          if (w2 > 0) setScale(w2 / DESIGN_WIDTH);
+        });
+        return;
+      }
       setScale(w / DESIGN_WIDTH);
     };
 
@@ -50,22 +69,35 @@ export function DesktopCanvas({ children }: { children: ReactNode }) {
     return () => ro.disconnect();
   }, []);
 
+  // `transform: scale()` does not shrink the layout box: a 1440px-tall child
+  // stays 1440px wide in the layout, so a narrower max-width parent + overflow
+  // clips the right side (pre-transform) — the hero U-shape and sections
+  // look broken. `zoom` scales paint *and* layout size together (same idea
+  // as the previous full-bleed canvas), so the 1440×H frame actually occupies
+  // (1440×scale)×(H×scale) in the document.
   return (
-    <div
-      ref={wrapRef}
-      className="relative w-full overflow-hidden"
-      style={{ height: DESIGN_HEIGHT * scale, background: DESIGN_BG }}
-    >
+    <div className="flex w-full justify-center bg-transparent px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
       <div
+        ref={wrapRef}
+        className="relative w-full max-w-[1440px] overflow-hidden"
         style={{
-          width: DESIGN_WIDTH,
-          height: DESIGN_HEIGHT,
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
+          background: `var(--buildon-page-gradient, ${DESIGN_BG})`,
         }}
-        className="relative"
       >
-        <ScaleContext.Provider value={scale}>{children}</ScaleContext.Provider>
+        <div
+          className="relative"
+          style={
+            {
+              width: DESIGN_WIDTH,
+              height: DESIGN_HEIGHT,
+              zoom: scale,
+            } as CanvasRootStyle
+          }
+        >
+          <ScaleContext.Provider value={scale}>
+            {children}
+          </ScaleContext.Provider>
+        </div>
       </div>
     </div>
   );

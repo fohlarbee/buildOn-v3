@@ -229,35 +229,6 @@ export function MobileContact() {
                 maxWidth: "calc(100vw - 28px)",
               }}
             >
-              <motion.button
-                type="button"
-                aria-label="Open Help Center"
-                onClick={() => setIsHelpOpen((v) => !v)}
-                whileHover={{ y: -2, scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
-                transition={
-                  reduce
-                    ? { duration: 0 }
-                    : { type: "spring", stiffness: 320, damping: 24 }
-                }
-                style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 999,
-                  border: "1px solid rgba(255,255,255,0.28)",
-                  background: `linear-gradient(135deg, ${ACCENT}, #4E4BD5)`,
-                  color: "#FFFFFF",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow:
-                    "0 16px 34px -12px rgba(85,126,246,0.72), 0 6px 18px rgba(0,0,0,0.35)",
-                  cursor: "pointer",
-                }}
-              >
-                <MessageIcon />
-              </motion.button>
-
               <AnimatePresence initial={false}>
                 {isHelpOpen && (
                   <motion.form
@@ -401,6 +372,35 @@ export function MobileContact() {
                   </motion.form>
                 )}
               </AnimatePresence>
+
+              <motion.button
+                type="button"
+                aria-label="Open Help Center"
+                onClick={() => setIsHelpOpen((v) => !v)}
+                whileHover={{ y: -2, scale: 1.03 }}
+                whileTap={{ scale: 0.96 }}
+                transition={
+                  reduce
+                    ? { duration: 0 }
+                    : { type: "spring", stiffness: 320, damping: 24 }
+                }
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 999,
+                  border: "1px solid rgba(255,255,255,0.28)",
+                  background: `linear-gradient(135deg, ${ACCENT}, #4E4BD5)`,
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow:
+                    "0 16px 34px -12px rgba(85,126,246,0.72), 0 6px 18px rgba(0,0,0,0.35)",
+                  cursor: "pointer",
+                }}
+              >
+                <MessageIcon />
+              </motion.button>
             </div>,
             document.body,
           )
@@ -411,9 +411,9 @@ export function MobileContact() {
 
 const SOCIALS = [
   { label: "Twitter / X", href: "#", Icon: TwitterIcon },
-  { label: "LinkedIn", href: "#", Icon: LinkedInIcon },
-  { label: "GitHub", href: "#", Icon: GitHubIcon },
-  { label: "Instagram", href: "#", Icon: InstagramIcon },
+  // { label: "LinkedIn", href: "#", Icon: LinkedInIcon },
+  // { label: "GitHub", href: "#", Icon: GitHubIcon },
+  // { label: "Instagram", href: "#", Icon: InstagramIcon },
 ];
 
 function TwitterIcon() {

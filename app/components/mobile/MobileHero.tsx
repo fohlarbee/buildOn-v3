@@ -52,7 +52,7 @@ export function MobileHero() {
           <div className="hero-slide-in-left w-[88%] sm:w-[82%]">
             <GlassCard accent="blue">
               <p className="font-[var(--font-red-hat)] text-[13.5px] font-light leading-[1.55] text-[#F5F5F5] sm:text-[15px] md:text-base">
-                Based in Delaware, United States, buildON Inc. is a
+                Based in Delaware, United States, BuildOn, Inc. is a
                 forward-thinking technology startup focused on turning bold
                 ideas into impactful{" "}
                 <span className="text-[#B0C3FB]">digital solutions</span>. We

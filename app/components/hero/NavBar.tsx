@@ -5,6 +5,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { COLORS, LAYOUT, MOTION } from "./constants";
 
+const NAV_LINKS: Record<string, string> = {
+  Home: "/",
+  About: "#core-values",
+  Expertise: "#services",
+  Work: "#projects",
+  Team: "#team",
+};
+
 /**
  * Renders the exact Figma wordmark asset using the same imageTransform the
  * design uses (scaleMode: STRETCH with y-scale 0.458, y-offset 0.289). The
@@ -68,7 +76,7 @@ export function NavBar() {
         {LAYOUT.nav.items.map((item) => (
           <Link
             key={item.label}
-            href="#"
+            href={NAV_LINKS[item.label] ?? "/"}
             style={{
               position: "absolute",
               left: item.x,

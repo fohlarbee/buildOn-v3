@@ -20,14 +20,9 @@ import { toast } from "sonner";
  * and socials at the top-left, with the big "CONTACT US" headline at
  * centre/right.
  *
- * In Desktop coords (frame x=1891), section spans roughly
- *   y=4980 → y=5260 (right before the footer glow at y=5281).
+ * Desktop: full-viewport-width band below the canvas; inner content is capped
+ * at 1440px and centered (same as the footer). Mobile uses `MobileContact`.
  */
-
-const SECTION_X = 0;
-const SECTION_Y = 4990;
-const SECTION_W = 1440;
-const SECTION_H = 280;
 
 const NAVY_BG = "#0B0F45";
 const ACCENT = "#557EF6";
@@ -153,201 +148,169 @@ export function ContactSection() {
     <>
       <section
         id="contact"
-        style={{
-          position: "absolute",
-          top: SECTION_Y,
-          left: SECTION_X,
-          width: SECTION_W,
-          height: SECTION_H,
-          background: NAVY_BG,
-          overflow: "hidden",
-        }}
+        className="relative mt-[50px] w-full min-h-[280px] overflow-hidden"
+        style={{ background: NAVY_BG }}
         aria-label="Contact Us"
       >
-        {/* Soft radial highlights */}
         <div
           aria-hidden
+          className="pointer-events-none absolute inset-0"
           style={{
-            position: "absolute",
-            inset: 0,
             background:
               "radial-gradient(600px 300px at 12% 18%, rgba(85,126,246,0.35), transparent 60%)," +
               "radial-gradient(800px 400px at 88% 85%, rgba(0,148,236,0.25), transparent 60%)",
           }}
         />
 
-        {/* Left cluster: email + socials */}
-        <motion.div
-          {...slide(0)}
-          style={{
-            position: "absolute",
-            top: 50,
-            left: 78,
-            display: "flex",
-            flexDirection: "column",
-            gap: 18,
-            color: "#fff",
-          }}
-        >
-          <div
+        <div className="relative z-[1] mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 py-10 sm:px-6 sm:py-12 lg:flex-row lg:items-start lg:justify-between lg:gap-6 lg:px-8 lg:pt-[50px] lg:pb-10 xl:px-[78px]">
+          <motion.div
+            {...slide(0)}
+            className="flex min-w-0 flex-col gap-[18px] text-white"
+          >
+            <div
+              style={{
+                fontFamily: "var(--font-red-hat)",
+                fontWeight: 500,
+                fontSize: 14,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.6)",
+              }}
+            >
+              Say hello
+            </div>
+            <a
+              href="mailto:support@buildonhq.org"
+              style={{
+                color: "#fff",
+                fontFamily: "var(--font-roboto-slab), var(--font-red-hat)",
+                fontWeight: 600,
+                fontSize: 28,
+                lineHeight: "36px",
+                letterSpacing: "-0.01em",
+                textDecoration: "none",
+                borderBottom: `2px solid ${SKY}`,
+                paddingBottom: 4,
+                alignSelf: "flex-start",
+              }}
+            >
+              support@buildonhq.org
+            </a>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginTop: 6,
+              }}
+            >
+              {SOCIALS.map((s) => (
+                <motion.a
+                  key={s.label}
+                  href={s.href}
+                  aria-label={s.label}
+                  {...(s.href.startsWith("http")
+                    ? { target: "_blank" as const, rel: "noopener noreferrer" }
+                    : {})}
+                  whileHover={{ y: -3, scale: 1.06 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 999,
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.18)",
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
+                  }}
+                >
+                  <s.Icon />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            {...slide(0.12)}
+            className="flex min-w-0 flex-col items-center gap-3.5 text-white lg:mx-auto lg:items-center"
+          >
+            <motion.h2
+              initial={reduce ? undefined : { opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={viewport}
+              transition={{ delay: 0.15, duration: 0.9, ease: EASE_OUT }}
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-roboto-slab), var(--font-red-hat)",
+                fontWeight: 700,
+                fontSize: 48,
+                lineHeight: "64px",
+                letterSpacing: "-0.01em",
+                textTransform: "uppercase",
+              }}
+            >
+              Contact Us
+            </motion.h2>
+            <motion.div
+              aria-hidden
+              initial={reduce ? undefined : { scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={viewport}
+              transition={{ delay: 0.4, duration: 0.9, ease: EASE_OUT }}
+              style={{
+                width: 218,
+                height: 2,
+                background: SKY,
+                transformOrigin: "left",
+              }}
+            />
+          </motion.div>
+
+          <motion.a
+            href="mailto:support@buildonhq.org"
+            {...slide(0.2)}
+            whileHover={{ x: 4 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="inline-flex w-fit shrink-0 items-center self-start gap-3.5 rounded-full px-5 py-3.5 no-underline lg:mt-5 lg:self-start"
             style={{
+              background: `linear-gradient(90deg, ${ACCENT}, #4E4BD5)`,
+              color: "#fff",
+              fontFamily: "var(--font-red-hat)",
+              fontWeight: 600,
+              fontSize: 15,
+              letterSpacing: "0.01em",
+              boxShadow:
+                "0 18px 36px -12px rgba(85,126,246,0.6), inset 0 1px 0 rgba(255,255,255,0.3)",
+            }}
+          >
+            Let&apos;s build something
+            <span aria-hidden style={{ fontSize: 18, lineHeight: 1 }}>
+              →
+            </span>
+          </motion.a>
+        </div>
+
+        <div className="relative z-[1] mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-[78px]">
+          <motion.div
+            {...slide(0.28)}
+            className="flex justify-end pb-8 pt-2 sm:pb-10"
+            style={{
+              color: "rgba(255,255,255,0.6)",
               fontFamily: "var(--font-red-hat)",
               fontWeight: 500,
-              fontSize: 14,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.6)",
-            }}
-          >
-            Say hello
-          </div>
-          <a
-            href="mailto:support@buildonhq.org"
-            style={{
-              color: "#fff",
-              fontFamily: "var(--font-roboto-slab), var(--font-red-hat)",
-              fontWeight: 600,
-              fontSize: 28,
-              lineHeight: "36px",
-              letterSpacing: "-0.01em",
-              textDecoration: "none",
-              borderBottom: `2px solid ${SKY}`,
-              paddingBottom: 4,
-              alignSelf: "flex-start",
-            }}
-          >
-            support@buildonhq.org
-          </a>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              marginTop: 6,
-            }}
-          >
-            {SOCIALS.map((s) => (
-              <motion.a
-                key={s.label}
-                href={s.href}
-                aria-label={s.label}
-                whileHover={{ y: -3, scale: 1.06 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 999,
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  color: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backdropFilter: "blur(6px)",
-                  WebkitBackdropFilter: "blur(6px)",
-                }}
-              >
-                <s.Icon />
-              </motion.a>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Big CONTACT US headline with underline */}
-        <motion.div
-          {...slide(0.12)}
-          style={{
-            position: "absolute",
-            top: 50,
-            left: 578, // 2469 - 1891
-            display: "flex",
-            flexDirection: "column",
-            gap: 14,
-            color: "#fff",
-          }}
-        >
-          <motion.h2
-            initial={reduce ? undefined : { opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={viewport}
-            transition={{ delay: 0.15, duration: 0.9, ease: EASE_OUT }}
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-roboto-slab), var(--font-red-hat)",
-              fontWeight: 700,
-              fontSize: 48,
-              lineHeight: "64px",
-              letterSpacing: "-0.01em",
+              fontSize: 13,
+              letterSpacing: "0.08em",
               textTransform: "uppercase",
             }}
           >
-            Contact Us
-          </motion.h2>
-          <motion.div
-            aria-hidden
-            initial={reduce ? undefined : { scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={viewport}
-            transition={{ delay: 0.4, duration: 0.9, ease: EASE_OUT }}
-            style={{
-              width: 218,
-              height: 2,
-              background: SKY,
-              transformOrigin: "left",
-            }}
-          />
-        </motion.div>
-
-        {/* Right CTA chip — "Let's build →" */}
-        <motion.a
-          href="mailto:support@buildonhq.org"
-          {...slide(0.2)}
-          whileHover={{ x: 4 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          style={{
-            position: "absolute",
-            top: 70,
-            right: 78,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 14,
-            padding: "14px 22px",
-            borderRadius: 999,
-            background: `linear-gradient(90deg, ${ACCENT}, #4E4BD5)`,
-            color: "#fff",
-            fontFamily: "var(--font-red-hat)",
-            fontWeight: 600,
-            fontSize: 15,
-            letterSpacing: "0.01em",
-            textDecoration: "none",
-            boxShadow:
-              "0 18px 36px -12px rgba(85,126,246,0.6), inset 0 1px 0 rgba(255,255,255,0.3)",
-          }}
-        >
-          Let&apos;s build something
-          <span aria-hidden style={{ fontSize: 18, lineHeight: 1 }}>
-            →
-          </span>
-        </motion.a>
-
-        {/* Location tag */}
-        <motion.div
-          {...slide(0.28)}
-          style={{
-            position: "absolute",
-            bottom: 40,
-            right: 78,
-            color: "rgba(255,255,255,0.6)",
-            fontFamily: "var(--font-red-hat)",
-            fontWeight: 500,
-            fontSize: 13,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-          }}
-        >
-          Remote-first · Global
-        </motion.div>
+            Remote-first · Global
+          </motion.div>
+        </div>
       </section>
 
       {mounted
@@ -364,42 +327,6 @@ export function ContactSection() {
                 gap: 10,
               }}
             >
-              <motion.button
-                type="button"
-                aria-label="Open Help Center"
-                onClick={() => setIsHelpOpen((v) => !v)}
-                whileHover={{ y: -2, scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
-                animate={
-                  reduce
-                    ? undefined
-                    : isHelpOpen
-                      ? { scale: 1.02 }
-                      : { scale: 1 }
-                }
-                transition={
-                  reduce
-                    ? { duration: 0 }
-                    : { type: "spring", stiffness: 320, damping: 24, mass: 0.8 }
-                }
-                style={{
-                  width: 58,
-                  height: 58,
-                  borderRadius: 999,
-                  border: "1px solid rgba(255,255,255,0.28)",
-                  background: `linear-gradient(135deg, ${ACCENT}, #4E4BD5)`,
-                  color: "#FFFFFF",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow:
-                    "0 16px 34px -12px rgba(85,126,246,0.72), 0 6px 18px rgba(0,0,0,0.35)",
-                  cursor: "pointer",
-                }}
-              >
-                <MessageIcon />
-              </motion.button>
-
               <AnimatePresence initial={false}>
                 {isHelpOpen && (
                   <motion.form
@@ -541,6 +468,42 @@ export function ContactSection() {
                   </motion.form>
                 )}
               </AnimatePresence>
+
+              <motion.button
+                type="button"
+                aria-label="Open Help Center"
+                onClick={() => setIsHelpOpen((v) => !v)}
+                whileHover={{ y: -2, scale: 1.03 }}
+                whileTap={{ scale: 0.96 }}
+                animate={
+                  reduce
+                    ? undefined
+                    : isHelpOpen
+                      ? { scale: 1.02 }
+                      : { scale: 1 }
+                }
+                transition={
+                  reduce
+                    ? { duration: 0 }
+                    : { type: "spring", stiffness: 320, damping: 24, mass: 0.8 }
+                }
+                style={{
+                  width: 58,
+                  height: 58,
+                  borderRadius: 999,
+                  border: "1px solid rgba(255,255,255,0.28)",
+                  background: `linear-gradient(135deg, ${ACCENT}, #4E4BD5)`,
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow:
+                    "0 16px 34px -12px rgba(85,126,246,0.72), 0 6px 18px rgba(0,0,0,0.35)",
+                  cursor: "pointer",
+                }}
+              >
+                <MessageIcon />
+              </motion.button>
             </div>,
             document.body,
           )
@@ -551,10 +514,14 @@ export function ContactSection() {
 
 // ─── socials ──────────────────────────────────────────────────────────────
 const SOCIALS = [
-  { label: "Twitter / X", href: "#", Icon: TwitterIcon },
-  { label: "LinkedIn", href: "#", Icon: LinkedInIcon },
-  { label: "GitHub", href: "#", Icon: GitHubIcon },
-  { label: "Instagram", href: "#", Icon: InstagramIcon },
+  {
+    label: "Twitter / X",
+    href: "https://x.com/buildON_Inc",
+    Icon: TwitterIcon,
+  },
+  // { label: "LinkedIn", href: "#", Icon: LinkedInIcon },
+  // { label: "GitHub", href: "#", Icon: GitHubIcon },
+  // { label: "Instagram", href: "#", Icon: InstagramIcon },
 ];
 
 function TwitterIcon() {

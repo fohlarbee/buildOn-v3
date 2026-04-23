@@ -7,22 +7,27 @@ import { motion, useReducedMotion } from "framer-motion";
 const NAVY_BG = "#0B0F45";
 const ACCENT = "#557EF6";
 
-const QUICK_LINKS = ["About", "Our work", "Services", "Contact"];
+const QUICK_LINKS = [
+  { label: "About", href: "#core-values" },
+  { label: "Our work", href: "#projects" },
+  { label: "Services", href: "#services" },
+  { label: "Contact", href: "#contact" },
+];
 const SERVICES = [
-  "Fintech",
-  "AI & Machine Learning",
-  "Blockchain",
-  "Cloud Computing",
-  "Cybersecurity",
-  "IoT",
+  { label: "Fintech" },
+  { label: "AI & Machine Learning" },
+  { label: "Blockchain" },
+  { label: "Cloud Computing" },
+  { label: "Cybersecurity" },
+  { label: "IoT" },
 ];
 const PRODUCTS = [
-  "AI Email Generator",
-  "Code Review Assistant",
-  "AI Resume Analyzer",
-  "Support Bot",
-  "Content Optimizer AI",
-  "Justxend Mobile",
+  { label: "AI Email Generator" },
+  { label: "Code Review Assistant" },
+  { label: "AI Resume Analyzer" },
+  { label: "Support Bot" },
+  { label: "Content Optimizer AI" },
+  { label: "Justxend Mobile" },
 ];
 
 export function MobileFooter() {
@@ -182,7 +187,7 @@ function FooterColumn({
   className,
 }: {
   title: string;
-  items: string[];
+  items: Array<{ label: string; href?: string }>;
   delay: number;
   fade: (delay: number) => {
     initial: { opacity: number; y: number } | undefined;
@@ -206,14 +211,23 @@ function FooterColumn({
       </h4>
       <ul className="m-0 flex flex-col gap-2 p-0">
         {items.map((item) => (
-          <li key={item} className="list-none">
-            <a
-              href="#"
-              className="font-[var(--font-red-hat)] text-sm no-underline transition hover:text-white"
-              style={{ color: "rgba(255,255,255,0.72)" }}
-            >
-              {item}
-            </a>
+          <li key={item.label} className="list-none">
+            {item.href ? (
+              <a
+                href={item.href}
+                className="font-[var(--font-red-hat)] text-sm no-underline transition hover:text-white"
+                style={{ color: "rgba(255,255,255,0.72)" }}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span
+                className="font-[var(--font-red-hat)] text-sm"
+                style={{ color: "rgba(255,255,255,0.72)" }}
+              >
+                {item.label}
+              </span>
+            )}
           </li>
         ))}
       </ul>

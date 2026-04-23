@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 /**
@@ -18,37 +18,37 @@ import { motion, useReducedMotion } from "framer-motion";
  *   Logo cluster            → x=1614, y=5344, 265×235
  *   Copyright               → x=2477, y=5793, centered, 16px Light
  *
- * In Desktop coords (frame x=1891), the footer spans y≈5260..5830 (end).
+ * Desktop: rendered **below** the zoomed canvas as a full-viewport-width band;
+ * the inner content grid is capped to 1440px and centered. Mobile uses
+ * `MobileFooter` instead.
  */
 
-const SECTION_Y = 5260;
 const SECTION_H = 571;
 const NAVY_BG = "#0B0F45";
 const ACCENT = "#557EF6";
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const LOGO_X = -277; // 1614 - 1891 — logo cluster falls left of the frame origin
-const SERVICES_X = 440; // 2331 - 1891
-const PRODUCTS_X = 778; // 2669 - 1891
-const QUICK_X = -137; // 1754 - 1891
-const SUBSCRIBE_X = 1469; // 3360 - 1891
-
-const QUICK_LINKS = ["About", "Our work", "Services", "Contact"];
+const QUICK_LINKS = [
+  { label: "About", href: "#core-values" },
+  { label: "Our work", href: "#projects" },
+  { label: "Services", href: "#services" },
+  { label: "Contact", href: "#contact" },
+];
 const SERVICES = [
-  "Fintech",
-  "AI & Machine Learning",
-  "Blockchain",
-  "Cloud Computing",
-  "Cybersecurity",
-  "IoT",
+  { label: "Fintech" },
+  { label: "AI & Machine Learning" },
+  { label: "Blockchain" },
+  { label: "Cloud Computing" },
+  { label: "Cybersecurity" },
+  { label: "IoT" },
 ];
 const PRODUCTS = [
-  "AI Email Generator",
-  "Code Review Assistant",
-  "AI Resume Analyzer",
-  "Support Bot",
-  "Content Optimizer AI",
-  "Justxend Mobile",
+  { label: "AI Email Generator" },
+  { label: "Code Review Assistant" },
+  { label: "AI Resume Analyzer" },
+  { label: "Support Bot" },
+  { label: "Content Optimizer AI" },
+  { label: "Justxend Mobile" },
 ];
 
 export function FooterSection() {
@@ -68,7 +68,7 @@ export function FooterSection() {
     },
   });
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setSubscribed(true);
@@ -80,30 +80,24 @@ export function FooterSection() {
 
   return (
     <footer
-      style={{
-        position: "absolute",
-        top: SECTION_Y,
-        left: 0,
-        width: 1440,
-        height: SECTION_H,
-        background: NAVY_BG,
-        overflow: "hidden",
-      }}
+      className="relative w-full overflow-hidden"
+      style={
+        {
+          minHeight: SECTION_H,
+          background: NAVY_BG,
+        } as CSSProperties
+      }
       aria-label="Footer"
     >
-      {/* Glass glow ellipse — radius matches Figma blur=250 */}
+      {/* Full-bleed glass glow (same Figma treatment, edge-to-edge) */}
       <motion.div
         aria-hidden
         initial={reduce ? undefined : { opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={viewport}
         transition={{ duration: reduce ? 0 : 1.4, ease: EASE_OUT }}
+        className="pointer-events-none absolute left-0 right-0 top-0 h-[200px] max-w-none"
         style={{
-          position: "absolute",
-          top: 5281 - SECTION_Y,
-          left: 0,
-          width: 1440,
-          height: 126,
           filter: "blur(120px)",
           background:
             "radial-gradient(60% 100% at 30% 50%, rgba(52,101,244,0.55), transparent 70%)," +
@@ -111,18 +105,8 @@ export function FooterSection() {
         }}
       />
 
-      {/* Content grid */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          padding: "130px 120px 40px",
-          display: "grid",
-          gridTemplateColumns: "1.1fr 1fr 1fr 1fr 1.2fr",
-          columnGap: 56,
-          color: "#fff",
-        }}
-      >
+      {/* Cap content to 1440px, match canvas alignment */}
+      <div className="relative z-[1] mx-auto grid w-full max-w-[1440px] grid-cols-[1.1fr_1fr_1fr_1fr_1.2fr] gap-x-8 gap-y-10 px-4 pb-6 pt-20 text-white sm:px-6 sm:pt-24 md:gap-x-10 lg:px-8 lg:pt-32 xl:gap-x-14 xl:px-[120px] xl:pt-[130px]">
         {/* Brand / logo column */}
         <motion.div
           {...slide(0)}
@@ -281,45 +265,19 @@ export function FooterSection() {
         </motion.div>
       </div>
 
-      {/* Copyright row */}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 5793 - SECTION_Y,
-          display: "flex",
-          justifyContent: "center",
-          color: "rgba(255,255,255,0.65)",
-          fontFamily: "var(--font-red-hat)",
-          fontWeight: 300,
-          fontSize: 16,
-          lineHeight: "21px",
-        }}
-      >
-        © 2026 buildON Inc. All rights reserved.
+      <div className="relative z-[1] mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-[120px]">
+        <div
+          aria-hidden
+          className="h-px w-full"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0))",
+          }}
+        />
+        <p className="m-0 py-6 text-center font-[var(--font-red-hat)] text-sm font-light text-white/65 sm:text-base">
+          © 2026 buildON Inc. All rights reserved.
+        </p>
       </div>
-
-      {/* Divider */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          left: 120,
-          right: 120,
-          top: 5770 - SECTION_Y,
-          height: 1,
-          background:
-            "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0))",
-        }}
-      />
-
-      {/* Use unused constants (quiet TS unused warnings) */}
-      <span
-        aria-hidden
-        style={{ display: "none" }}
-        data-anchors={`${LOGO_X} ${SERVICES_X} ${PRODUCTS_X} ${QUICK_X} ${SUBSCRIBE_X}`}
-      />
     </footer>
   );
 }
@@ -332,7 +290,7 @@ function FooterColumn({
   titleSize = 20,
 }: {
   title: string;
-  items: string[];
+  items: Array<{ label: string; href?: string }>;
   delay: number;
   slide: (
     delay: number,
@@ -377,29 +335,43 @@ function FooterColumn({
         }}
       >
         {items.map((item) => (
-          <li key={item}>
-            <a
-              href="#"
-              style={{
-                color: "rgba(255,255,255,0.72)",
-                fontFamily: "var(--font-red-hat)",
-                fontWeight: 400,
-                fontSize: 14,
-                lineHeight: "20px",
-                textDecoration: "none",
-                transition: "color 0.2s ease, padding-left 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "#fff";
-                e.currentTarget.style.paddingLeft = "4px";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "rgba(255,255,255,0.72)";
-                e.currentTarget.style.paddingLeft = "0";
-              }}
-            >
-              {item}
-            </a>
+          <li key={item.label}>
+            {item.href ? (
+              <a
+                href={item.href}
+                style={{
+                  color: "rgba(255,255,255,0.72)",
+                  fontFamily: "var(--font-red-hat)",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  lineHeight: "20px",
+                  textDecoration: "none",
+                  transition: "color 0.2s ease, padding-left 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.paddingLeft = "4px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.72)";
+                  e.currentTarget.style.paddingLeft = "0";
+                }}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span
+                style={{
+                  color: "rgba(255,255,255,0.72)",
+                  fontFamily: "var(--font-red-hat)",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  lineHeight: "20px",
+                }}
+              >
+                {item.label}
+              </span>
+            )}
           </li>
         ))}
       </ul>

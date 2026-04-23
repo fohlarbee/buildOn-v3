@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const NAV_ITEMS = [
-  { label: "Home", href: "#" },
-  { label: "About", href: "#" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "#core-values" },
   { label: "Expertise", href: "#services" },
   { label: "Work", href: "#projects" },
   { label: "Team", href: "#team" },
@@ -43,7 +43,7 @@ export function MobileNavBar() {
       >
         <div className="mx-auto flex h-14 max-w-[720px] items-center justify-between px-4 sm:h-16 sm:px-6">
           <Link
-            href="#"
+            href="/"
             aria-label="buildON — home"
             className="flex items-center"
           >
@@ -64,7 +64,7 @@ export function MobileNavBar() {
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/25 bg-white/10 text-white transition hover:bg-white/20 sm:h-11 sm:w-11"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/25 bg-white/10 p-0 text-white transition hover:bg-white/20 sm:h-11 sm:w-11"
             >
               <HamburgerIcon open={open} />
             </button>
@@ -226,37 +226,32 @@ function MailIcon() {
 }
 
 function HamburgerIcon({ open }: { open: boolean }) {
-  const bar =
-    "absolute left-1/2 block h-[1.6px] w-[18px] -translate-x-1/2 rounded-full bg-current transition-all duration-300 ease-out";
+  // SVG in viewBox coords — no absolute spans; flex on the parent centers this reliably.
   return (
-    <span className="relative block h-[18px] w-[18px]" aria-hidden>
-      <span
-        className={bar}
-        style={{
-          top: "50%",
-          transform: open
-            ? "translate(-50%, -50%) rotate(45deg)"
-            : "translate(-50%, calc(-50% - 5px))",
-        }}
-      />
-      <span
-        className={bar}
-        style={{
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          opacity: open ? 0 : 1,
-        }}
-      />
-      <span
-        className={bar}
-        style={{
-          top: "50%",
-          transform: open
-            ? "translate(-50%, -50%) rotate(-45deg)"
-            : "translate(-50%, calc(-50% + 5px))",
-        }}
-      />
-    </span>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="shrink-0 text-current transition-[opacity,transform] duration-200"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="1.75"
+      aria-hidden
+    >
+      {open ? (
+        <>
+          <path d="M6 6l12 12" />
+          <path d="M18 6L6 18" />
+        </>
+      ) : (
+        <>
+          <path d="M5 7h14" />
+          <path d="M5 12h14" />
+          <path d="M5 17h14" />
+        </>
+      )}
+    </svg>
   );
 }
 

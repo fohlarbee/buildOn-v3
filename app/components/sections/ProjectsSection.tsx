@@ -28,11 +28,12 @@ import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
  */
 
 const PILL_X = 623; // 2514 - 1891
-const PILL_Y = 3016;
+const SECTION_SHIFT_Y = 1123;
+const PILL_Y = 3016 - SECTION_SHIFT_Y;
 const PILL_SIZE = 180;
 
 const CARD_X = 65; // 1956 - 1891
-const CARD_Y = 3103;
+const CARD_Y = 3103 - SECTION_SHIFT_Y;
 const CARD_W = 1312;
 const CARD_H = 1103;
 
@@ -49,7 +50,7 @@ const NOTCH_HALF_W = 112; // total notch width 224 (pill 180 + 44px cradle)
 const NOTCH_DEPTH = 96; // slightly beyond pill radius (90)
 
 const STAGE_X = 77; // 1968 - 1891
-const STAGE_Y = 3286;
+const STAGE_Y = 3286 - SECTION_SHIFT_Y;
 const STAGE_W = 1288;
 const STAGE_H = 736;
 

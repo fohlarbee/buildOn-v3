@@ -21,10 +21,11 @@ import { motion, useReducedMotion } from "framer-motion";
  */
 
 const HEADER_X = 67; // 1958 - 1891
-const HEADER_Y = 4397;
+const SECTION_SHIFT_Y = 1123;
+const HEADER_Y = 4397 - SECTION_SHIFT_Y;
 
 const STEPS_X = 67;
-const STEPS_Y = 4620;
+const STEPS_Y = 4620 - SECTION_SHIFT_Y;
 const STEPS_W = 1308;
 const STEPS_H = 320;
 

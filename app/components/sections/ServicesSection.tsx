@@ -28,12 +28,14 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const SECTION_X = 116; // 2007 - 1891
 const HEADER_X = 616; // 2507 - 1891 (relative to canvas x=0)
-const HEADER_Y = 2154;
+// Team section is temporarily removed, so pull Services up to close that gap.
+const SECTION_SHIFT_Y = 1123;
+const HEADER_Y = 2154 - SECTION_SHIFT_Y;
 const HEADER_W = 210;
 const HEADER_H = 88;
 
 const CARD_X = 116;
-const CARD_Y = 2278;
+const CARD_Y = 2278 - SECTION_SHIFT_Y;
 const CARD_W = 1210;
 const CARD_H = 640;
 const CARD_RADIUS = 64;
