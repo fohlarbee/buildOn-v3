@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
+import { useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 type Service = { title: string; description: string; Icon: () => ReactElement };
@@ -61,6 +62,7 @@ const CORNFLOWER = "#557EF6";
 
 export function MobileServices() {
   const reduce = useReducedMotion();
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const viewport = { once: true, amount: 0.1 };
 
   const fade = (delay: number) => ({
@@ -73,6 +75,18 @@ export function MobileServices() {
       ease: [0.16, 1, 0.3, 1] as const,
     },
   });
+
+  function scrollServicesAhead() {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>("[data-service-card]");
+    const gap = 16;
+    const step =
+      card && card.offsetWidth > 0
+        ? card.offsetWidth + gap
+        : el.clientWidth * 0.72;
+    el.scrollBy({ left: step, behavior: reduce ? "auto" : "smooth" });
+  }
 
   return (
     <section
@@ -135,30 +149,57 @@ export function MobileServices() {
             }}
           />
 
-          <div className="relative grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 sm:gap-5 sm:p-7 md:grid-cols-3 md:gap-6 md:p-8">
-            {SERVICES.map((s, i) => (
-              <motion.div
-                key={`${s.title}-${i}`}
-                {...fade(0.15 + i * 0.05)}
-                className="flex flex-col items-start gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-sm sm:p-5"
-              >
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl text-white sm:h-11 sm:w-11"
-                  style={{
-                    background: `linear-gradient(135deg, ${CORNFLOWER}, ${NAVY})`,
-                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35)",
-                  }}
+          <div className="relative p-5 sm:p-7 md:p-8">
+            <div
+              ref={scrollerRef}
+              className="flex snap-x snap-mandatory flex-row flex-nowrap gap-4 overflow-x-auto overflow-y-hidden overscroll-x-contain pb-1 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0 sm:snap-none md:grid-cols-3 md:gap-6 [&::-webkit-scrollbar]:hidden"
+              role="list"
+              aria-label="Service offerings"
+            >
+              {SERVICES.map((s, i) => (
+                <motion.div
+                  key={`${s.title}-${i}`}
+                  role="listitem"
+                  data-service-card
+                  {...fade(0.15 + i * 0.05)}
+                  className="flex max-sm:w-[min(280px,calc(100vw-5.5rem))] max-sm:shrink-0 max-sm:snap-center flex-col items-start gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-sm sm:min-w-0 sm:p-5"
                 >
-                  <s.Icon />
-                </div>
-                <div className="font-[var(--font-red-hat)] text-base font-bold text-[#FAF7FF] sm:text-[17px]">
-                  {s.title}
-                </div>
-                <div className="font-[var(--font-red-hat)] text-xs leading-[1.5] text-[#F5F5F5]/90 sm:text-sm">
-                  {s.description}
-                </div>
-              </motion.div>
-            ))}
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-xl text-white sm:h-11 sm:w-11"
+                    style={{
+                      background: `linear-gradient(135deg, ${CORNFLOWER}, ${NAVY})`,
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35)",
+                    }}
+                  >
+                    <s.Icon />
+                  </div>
+                  <div className="font-[var(--font-red-hat)] text-base font-bold text-[#FAF7FF] sm:text-[17px]">
+                    {s.title}
+                  </div>
+                  <div className="font-[var(--font-red-hat)] text-xs leading-[1.5] text-[#F5F5F5]/90 sm:text-sm">
+                    {s.description}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-3 flex justify-center sm:hidden">
+              <button
+                type="button"
+                onClick={scrollServicesAhead}
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 font-[var(--font-red-hat)] text-xs font-semibold text-[#FAF7FF]/95 shadow-sm backdrop-blur-sm active:scale-[0.98] motion-safe:transition-transform"
+                style={{ color: YELLOW }}
+                aria-label="Scroll to see more services"
+              >
+                <span
+                  aria-hidden
+                  className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[10px]"
+                >
+                  →
+                </span>
+                Swipe for more
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>

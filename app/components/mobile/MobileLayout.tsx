@@ -20,10 +20,13 @@ import { MobileFooter } from "./MobileFooter";
  */
 export function MobileLayout() {
   return (
-    <div className="w-full overflow-hidden bg-transparent text-zinc-900">
+    <div className="w-full overflow-x-clip bg-transparent text-zinc-900">
       <MobileNavBar />
-      <MobileHero />
-      <MobileCoreValues />
+      {/* Hero + core values share a stacking context so value cards can float over the hero bottom */}
+      <div className="relative isolate">
+        <MobileHero />
+        <MobileCoreValues />
+      </div>
       {/* <MobileTeam /> */}
       <MobileServices />
       <MobileProjects />

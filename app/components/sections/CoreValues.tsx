@@ -7,6 +7,10 @@ import { motion, useReducedMotion } from "framer-motion";
  * Core Values band — three value cards positioned over the lower half of the
  * hero section. Matches Figma node 314:1284 (component set 314:1252).
  *
+ * Mobile / tablet (<1024px): see `app/components/mobile/MobileCoreValues.tsx`
+ * — hero overlap plus a small-screen “focal” layout: one featured card with two
+ * wing cards in a loose triangle, driven by state + springs (not horizontal scroll).
+ *
  * Figma geometry (absolute, inside Desktop frame at x=1891, y=0):
  *   container  → x=1930, y=769, w=1365, h=162   (clipsContent = true)
  *   card cols  → x=1977 (card 1), 2454 (card 2), 2978 (card 3) — width 270

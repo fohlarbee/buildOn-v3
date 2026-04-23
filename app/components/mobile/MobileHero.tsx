@@ -43,7 +43,7 @@ export function MobileHero() {
       </div>
 
       {/* Content — two glass cards, staggered (not straight stacked) */}
-      <div className="relative z-10 mx-auto max-w-[720px] px-4 pt-4 pb-16 sm:px-6 sm:pt-6 sm:pb-20 md:px-10 md:pt-8 md:pb-24">
+      <div className="relative z-10 mx-auto max-w-[720px] px-4 pt-4 pb-24 sm:px-6 sm:pt-6 sm:pb-28 md:px-10 md:pt-8 md:pb-32">
         {/* Small spacer so cards sit just below the navbar */}
         <div className="h-[60px] sm:h-[80px] md:h-[100px]" aria-hidden />
 
