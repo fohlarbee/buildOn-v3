@@ -104,33 +104,31 @@ type Project = {
   image: string;
 };
 
-// Four unique projects extracted from Figma carousel panels (527:688),
-// each with the exact image fill referenced in Figma (downloaded to
-// /public/figma/projects/).
+// Four unique projects used in the projects carousel.
 const PROJECTS: Project[] = [
   {
     title: "NextGen Banking Platform",
     description:
       "A secure, scalable fintech platform enabling seamless digital banking and payment solutions.",
-    image: "/figma/projects/nextgen-banking.png",
+    image: "/assets/Banking-platform.png",
   },
   {
     title: "AI Marketing Suite",
     description:
       "An intelligent automation platform that enhances customer engagement through data-driven insights.",
-    image: "/figma/projects/ai-marketing.png",
+    image: "/assets/Ai-marketing-suite.png",
   },
   {
     title: "Decentralized Crypto Wallet",
     description:
       "A secure blockchain-based wallet with seamless token management and exchange integrations.",
-    image: "/figma/projects/crypto-wallet.png",
+    image: "/assets/Decentralized-crypto-wallet.png",
   },
   {
     title: "Telemedicine Platform",
     description:
       "A modern healthtech solution connecting patients and providers through real-time virtual care.",
-    image: "/figma/projects/telemedicine.png",
+    image: "/assets/Telemedicine.png",
   },
 ];
 
@@ -253,28 +251,10 @@ export function ProjectsSection() {
                 fill
                 sizes="1288px"
                 priority={index === 0}
+                quality={100}
+                unoptimized
                 style={{ objectFit: "cover" }}
               />
-              {/* Uniform dark overlay to tone down the image. */}
-              <div
-                aria-hidden
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "rgba(5, 8, 40, 0.55)",
-                }}
-              />
-              {/* Extra bottom vignette so text stays legible. */}
-              <div
-                aria-hidden
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(to top, rgba(5,8,40,0.55), rgba(5,8,40,0.0) 55%)",
-                }}
-              />
-
               <div
                 style={{
                   position: "relative",

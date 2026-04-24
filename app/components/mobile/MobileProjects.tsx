@@ -15,25 +15,25 @@ const PROJECTS: Project[] = [
     title: "NextGen Banking Platform",
     description:
       "A secure, scalable fintech platform enabling seamless digital banking and payment solutions.",
-    image: "/figma/projects/nextgen-banking.png",
+    image: "/assets/Banking-platform.png",
   },
   {
     title: "AI Marketing Suite",
     description:
       "An intelligent automation platform that enhances customer engagement through data-driven insights.",
-    image: "/figma/projects/ai-marketing.png",
+    image: "/assets/Ai-marketing-suite.png",
   },
   {
     title: "Decentralized Crypto Wallet",
     description:
       "A secure blockchain-based wallet with seamless token management and exchange integrations.",
-    image: "/figma/projects/crypto-wallet.png",
+    image: "/assets/Decentralized-crypto-wallet.png",
   },
   {
     title: "Telemedicine Platform",
     description:
       "A modern healthtech solution connecting patients and providers through real-time virtual care.",
-    image: "/figma/projects/telemedicine.png",
+    image: "/assets/Telemedicine.png",
   },
 ];
 
@@ -141,21 +141,9 @@ export function MobileProjects() {
                   sizes="(max-width: 640px) 100vw, 720px"
                   className="object-cover"
                   priority={index === 0}
+                  quality={100}
+                  unoptimized
                 />
-                <div
-                  aria-hidden
-                  className="absolute inset-0"
-                  style={{ background: "rgba(5, 8, 40, 0.55)" }}
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(to top, rgba(5,8,40,0.8) 10%, rgba(5,8,40,0.0) 55%)",
-                  }}
-                />
-
                 <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 px-5 pb-16 text-white sm:px-8 sm:pb-20">
                   <motion.h3
                     initial={false}
