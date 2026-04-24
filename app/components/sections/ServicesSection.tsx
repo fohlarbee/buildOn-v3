@@ -73,7 +73,7 @@ const ROW1: Service[] = [
     Icon: CloudIcon,
   },
   {
-    title: "Coud computing",
+    title: "Cloud computing",
     description:
       "Flexible and scalable cloud system for modern digital operations.",
     Icon: BrowserIcon,
